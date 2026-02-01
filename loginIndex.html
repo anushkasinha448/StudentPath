@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentPath - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="loginStyle.css">
+</head>
+<body>
+
+<div class="container" id="container">
+    <!-- SIGN UP (hidden side) -->
+    <div class="form-container sign-up-container">
+        <form>
+            <h1>Create Account</h1>
+            <input type="text" placeholder="Name" />
+            <input type="email" placeholder="Email" />
+            <div class="password-wrapper">
+                <input type="password" placeholder="Password" class="password-input">
+                <i class="fa-solid fa-eye toggle-password"></i>
+            </div>
+            <button type="button">Sign Up</button>
+        </form>
+    </div>
+
+    <!-- SIGN IN (visible) -->
+    <div class="form-container sign-in-container">
+        <form>
+            <h1>Sign in to StudentPath</h1>
+            <input type="email" placeholder="Email" />
+            <div class="password-wrapper">
+                <input type="password" placeholder="Password" class="password-input">
+                <i class="fa-solid fa-eye toggle-password"></i>
+            </div>
+            <button type="button">Sign In</button>
+        </form>
+    </div>
+
+    <!-- OVERLAY -->
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h2>Welcome Back!</h2>
+                <p>Please login with your personal info</p>
+                <button class="ghost" onclick="window.location.href='login.html'">
+                    Sign In
+                </button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h2>Hello, Friend!</h2>
+                <p>Enter your details and start your journey</p>
+                <button class="ghost" onclick="window.location.href='signup.html'">
+                    Sign Up
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="loginScript.js"></script>
+</body>
+</html>

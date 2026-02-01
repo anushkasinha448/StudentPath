@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>StudentPath | B.Tech Progress</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+}
+
+nav {
+    background: #1f2933;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+section {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+}
+
+select {
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.progress-box {
+    margin: 20px 0;
+}
+
+.progress-bar {
+    height: 18px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #1abc9c;
+    transition: 0.3s;
+}
+
+.checklist label {
+    display: block;
+    margin: 10px 0;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <strong style="color:white;">StudentPath</strong>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="branches.html">Branches</a>
+        <a href="btech.html">B.Tech</a>
+    </div>
+</nav>
+
+<section>
+
+<h1>B.Tech Internship & Placement Tracker</h1>
+
+<!-- SELECTORS -->
+<div class="card">
+    <strong>Select Year:</strong>
+    <select id="yearSelect">
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">Final Year</option>
+    </select>
+
+    <strong>Select Goal:</strong>
+    <select id="goalSelect">
+        <option value="internship">Internship</option>
+        <option value="placement">Placement</option>
+        <option value="higher">Higher Studies</option>
+        <option value="startup">Startup</option>
+    </select>
+</div>
+
+<!-- PROGRESS -->
+<div class="card">
+    <div class="progress-box">
+        <strong id="progressText">You are 0% internship-ready</strong>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <p>🔥 Daily Streak: <strong id="streak">0</strong> days</p>
+</div>
+
+<!-- CHECKLIST -->
+<div class="card">
+    <h2>Checklist</h2>
+    <div class="checklist" id="checklist"></div>
+</div>
+
+</section>
+
+<script>
+const checklistData = {
+    "2_internship": [
+        "Learn one programming language",
+        "Basics of DSA",
+        "Git & GitHub",
+        "Build 1 mini project"
+    ],
+    "3_internship": [
+        "Advanced DSA",
+        "Build 2 projects",
+        "Apply for internships",
+        "Resume preparation"
+    ],
+    "4_placement": [
+        "Company-wise DSA",
+        "Mock interviews",
+        "System design basics",
+        "HR interview prep"
+    ]
+};
+
+const checklistDiv = document.getElementById("checklist");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+const streakText = document.getElementById("streak");
+
+function getKey() {
+    const year = document.getElementById("yearSelect").value;
+    const goal = document.getElementById("goalSelect").value;
+    return `${year}_${goal}`;
+}
+
+function loadChecklist() {
+    checklistDiv.innerHTML = "";
+    const key = getKey();
+    const items = checklistData[key] || [];
+
+    items.forEach((item, index) => {
+        const id = key + index;
+        const checked = localStorage.getItem(id) === "true";
+
+        checklistDiv.innerHTML += `
+            <label>
+                <input type="checkbox" ${checked ? "checked" : ""} 
+                onchange="toggleCheck('${id}')">
+                ${item}
+            </label>`;
+    });
+
+    updateProgress();
+}
+
+function toggleCheck(id) {
+    const checkbox = event.target;
+    localStorage.setItem(id, checkbox.checked);
+    updateProgress();
+    updateStreak();
+}
+
+function updateProgress() {
+    const key = getKey();
+    const items = checklistData[key] || [];
+    let checked = 0;
+
+    items.forEach((_, index) => {
+        if (localStorage.getItem(key + index) === "true") checked++;
+    });
+
+    const percent = items.length ? Math.round((checked / items.length) * 100) : 0;
+    progressFill.style.width = percent + "%";
+    progressText.innerText = `You are ${percent}% ${document.getElementById("goalSelect").value}-ready`;
+}
+
+function updateStreak() {
+    const today = new Date().toDateString();
+    const lastDay = localStorage.getItem("lastDay");
+    let streak = Number(localStorage.getItem("streak")) || 0;
+
+    if (lastDay !== today) {
+        streak++;
+        localStorage.setItem("streak", streak);
+        localStorage.setItem("lastDay", today);
+    }
+
+    streakText.innerText = streak;
+}
+
+document.getElementById("yearSelect").onchange = loadChecklist;
+document.getElementById("goalSelect").onchange = loadChecklist;
+
+loadChecklist();
+streakText.innerText = localStorage.getItem("streak") || 0;
+</script>
+
+</body>
+</html>
